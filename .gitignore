@@ -1,39 +1,144 @@
-# потом внесем что нибудь типа енв
-# === Python ===
+## потом внесем что нибудь типа енв
+## === Python ===
+#__pycache__/
+#*.py[cod]
+#*$py.class
+#*.so
+#.Python
+#env/
+#build/
+#develop-eggs/
+#dist/
+#downloads/
+#eggs/
+#.eggs/
+#lib/
+#lib64/
+#parts/
+#sdist/
+#var/
+#wheels/
+#pip-wheel-metadata/
+#share/python-wheels/
+#*.egg-info/
+#.installed.cfg
+#*.egg
+#
+## === Virtual Environments ===
+#.venv
+#.venv/
+#venv/
+#ENV/
+#env.bak/
+#venv.bak/
+#
+## === FastAPI / ASGI / Uvicorn ===
+## (обычно не требуют специфичных исключений, но логи — да)
+#*.log
+#logs/
+#informing/
+#inform.log
+#loGgGi.log
+#trade.log
+#system.log
+#debug.log
+#
+## === SQLite ===
+## Игнорируем файлы БД, если они генерируются локально
+#*.sqlite3
+#*.db
+#*.sqlite
+#sql_terminator.db
+#
+## Если у вас есть фиксированный путь к БД, например:
+## database.db
+## — раскомментируйте строку ниже:
+## database.db
+#
+## === Secrets & Config ===
+#.env
+#.env.local
+#.env.ter
+#.env.term
+#.env.*.local
+#config/local_settings.py
+#SEM.session
+#SEM.session-journal
+## === IDE / Editors ===
+#.vscode/
+#.idea/
+#*.swp
+#*.swo
+#.DS_Store
+#Thumbs.db
+#
+## === Docker (если используете) ===
+#.dockerignore
+
+
+
+
+# ==============================================================================
+# .GITIGNORE ДЛЯ PYTHON / FASTAPI ПРОЕКТА
+# ==============================================================================
+
+# ==========================================
+# 1. СЕКРЕТЫ И КОНФИГУРАЦИЯ (КРИТИЧНО!)
+# Пароли, токены и ключи НИКОГДА не должны быть в Git.
+# ==========================================
+.env
+.env.local
+.env.term
+env.term
+.env.wallet
+env.wallet
+.env.*.local
+config/local_settings.py
+
+# Специфичные файлы проекта (Т-Банк, Telegram, трейдинг)
+credentials.json
+tiker_figi.json
+token.pickle
+MAR.session
+MAR.session-journal
+SEM.session
+SEM.session-journal
+
+# ==========================================
+# 2. PYTHON: Кэш и артефакты
+# ==========================================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# === Virtual Environments ===
-.venv
-.venv/
+tiker_figi.json
+# ==========================================
+# 3. ВИРТУАЛЬНЫЕ ОКРУЖЕНИЯ
+# ==========================================
 venv/
+.venv/
+env/
 ENV/
-env.bak/
 venv.bak/
+env.bak/
 
-# === FastAPI / ASGI / Uvicorn ===
-# (обычно не требуют специфичных исключений, но логи — да)
+# ==========================================
+# 4. БАЗЫ ДАННЫХ (SQLite)
+# Локальные БД не коммитим, чтобы не тащить тестовые данные.
+# ==========================================
+*.sqlite3
+*.sqlite
+*.db
+sql_terminator.db
+# database.db  # Раскомментируй, если используется конкретное имя файла
+
+# ==========================================
+# 5. ЛОГИ И ВРЕМЕННЫЕ ДАННЫЕ
+# ==========================================
 *.log
 logs/
 informing/
@@ -42,35 +147,34 @@ loGgGi.log
 trade.log
 system.log
 debug.log
+tmp/
+temp/
 
-# === SQLite ===
-# Игнорируем файлы БД, если они генерируются локально
-*.sqlite3
-*.db
-*.sqlite
-sql_terminator.db
-
-# Если у вас есть фиксированный путь к БД, например:
-# database.db
-# — раскомментируйте строку ниже:
-# database.db
-
-# === Secrets & Config ===
-.env
-.env.local
-.env.ter
-.env.term
-.env.*.local
-config/local_settings.py
-SEM.session
-SEM.session-journal
-# === IDE / Editors ===
-.vscode/
+# ==========================================
+# 6. IDE И РЕДАКТОРЫ
+# ==========================================
 .idea/
+*.iml
+.vscode/
+*.code-workspace
 *.swp
 *.swo
+*~
 .DS_Store
 Thumbs.db
 
-# === Docker (если используете) ===
-.dockerignore
+# ==========================================
+# 7. АРТЕФАКТЫ СБОРКИ
+# ==========================================
+build/
+dist/
+sdist/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+.eggs/
+develop-eggs/
+parts/
+var/
+downloads/
+

@@ -1,5 +1,5 @@
 # ПРОВЕРЯЕМ АКТУАЛЬНЫ ЛИ ТИКЕРЫ
-from log.logger import inform, logger
+from log.logicuber import system_log, trade_log
 import json
 import os
 from dotenv import load_dotenv
@@ -64,14 +64,14 @@ class ActualniiTiker:
                 # Разница во времени
                 delta = datetime.now() - datetime.fromtimestamp(last_modified)
                 if delta >= timedelta(days=self.days):
-                    inform.info(f"Обновляем ФИГИ в tiker_figi.json. Прошло {delta.days} дней!!!")
+                    system_log.info(f"Обновляем ФИГИ в tiker_figi.json. Прошло {delta.days} дней!!!")
                     self.save_all_json()
                     return True
                 else:
-                    inform.info(f"Файл был изменён менее {self.days} дней. Прошло только {delta.days} дней!!! ВСЕ ОК.")
+                    system_log.info(f"Файл был изменён менее {self.days} дней. Прошло только {delta.days} дней!!! ВСЕ ОК.")
                     return False
         except Exception as e:
-            logger.info(
+            system_log.info(
                 f"ActualniiTiker last_modified_json() - (ошибка) нет файла tiker_figi.json: Exception as e : {e}")
 
     # ---------НАЧАЛО ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ----------------
@@ -85,7 +85,7 @@ class ActualniiTiker:
                 json.dump(self.tiker_figi, f, indent=4, ensure_ascii=False, sort_keys=True)
             return True
         except Exception as e:
-            logger.info(f"ActualniiTiker save_all_json - не получается сохранить JSON.Exception as e : {e}")
+            system_log.info(f"ActualniiTiker save_all_json - не получается сохранить JSON.Exception as e : {e}")
             return False
 
     def _load_all_instruments(self):
@@ -114,9 +114,9 @@ class ActualniiTiker:
                 )
                 df['type'] = type_name
                 all_data.append(df)
-                logger.info(f"Загружено {type_name}: {len(df)} шт.")
+                system_log.info(f"Загружено {type_name}: {len(df)} шт.")
             except Exception as e:
-                logger.info(f"Ошибка загрузки {type_name}: {e}")
+                system_log.info(f"Ошибка загрузки {type_name}: {e}")
         # Склеиваем все инструменты в один общий DataFrame
         self._all_instruments_df = pd.concat(all_data, ignore_index=True)
 
@@ -135,11 +135,11 @@ class ActualniiTiker:
         matches = self._all_instruments_df[mask]
         # Не найден
         if matches.empty:
-            logger.info(f"Тикер '{tiker}' не найден ни в одном типе инструментов")
+            system_log.info(f"Тикер '{tiker}' не найден ни в одном типе инструментов")
             return None
         # Найден в нескольких (бывает для разных бирж)
         if len(matches) > 1:
-            logger.info(
+            system_log.info(
                 f"Тикер '{tiker}' найден в нескольких инструментах:\n"
                 f"{matches[['ticker', 'type', 'name', 'class_code']].to_string(index=False)}\n"
                 f"Берём первый: {matches.iloc[0]['name']} ({matches.iloc[0]['type']})"
@@ -154,10 +154,10 @@ class ActualniiTiker:
         try:
             active_tickers = session.query(AnalysisTiker.tiker).filter(AnalysisTiker.activity == "на рынке").all()
             active_tickers = [row[0] for row in active_tickers]
-            logger.info(f"СПИСОК АКТИВНЫХ АКЦИЙ {active_tickers}")
+            system_log.info(f"СПИСОК АКТИВНЫХ АКЦИЙ {active_tickers}")
             return active_tickers
         except Exception as e:
-            logger.info(
+            system_log.info(
                 f"ActualniiTiker list_active_tickers() - не получается достать ВСЕ АКЦИИ 'на рынке' ИЗ БАЗЫ Exception as e : {e}")
 
     def __enter__(self):
@@ -191,11 +191,11 @@ class ReadTickerFigiJson:
                 self._data = json.load(f)
                 return self._data
         except json.JSONDecodeError as e:
-            logger.error(f"Повреждён JSON в файле {self.file_path}: {e}")
+            system_log.error(f"Повреждён JSON в файле {self.file_path}: {e}")
         except FileNotFoundError:
-            logger.error(f"Файл не найден: {self.file_path}")
+            system_log.error(f"Файл не найден: {self.file_path}")
         except OSError as e:
-            logger.error(f"Ошибка чтения файла {self.file_path}: {e}")
+            system_log.error(f"Ошибка чтения файла {self.file_path}: {e}")
         return {}
 
     def read_tiker_figi_json(self) -> Dict[str, Any]:
