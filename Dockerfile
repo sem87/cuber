@@ -1,16 +1,32 @@
 FROM python:3.11-slim
+
+# Объявляем аргументы (значения передаются только при сборке)
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+
+# Передаем их в переменные окружения для pip и системных утилит
+ENV HTTP_PROXY=$HTTP_PROXY
+ENV HTTPS_PROXY=$HTTPS_PROXY
+ENV http_proxy=$HTTP_PROXY
+ENV https_proxy=$HTTPS_PROXY
+
 WORKDIR /app
+
+# Копируем только requirements.txt для эффективного кэширования
 COPY requirements.txt .
 
-# 2. Устанавливаем зависимости (с доверенными хостами для Т-Банка)
+# Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt \
     --trusted-host opensource.tbank.ru \
     --trusted-host pypi.org \
     --trusted-host files.pythonhosted.org
+
+# Копируем весь остальной код
 COPY . .
-# Добавляем текущую директорию в PYTHONPATH     надо ли это???????????????
-ENV PYTHONPATH=/app
+
+# PYTHONPATH не нужен: WORKDIR автоматически добавляется в sys.path
+
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD python -c "print('OK')" || exit 1
-# Запуск скрипта
+
 CMD ["python", "cuberbot.py"]

@@ -9,7 +9,7 @@ import uuid
 # import math
 from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR,ROUND_HALF_UP
 
-load_dotenv("../terminator/.env.term")
+load_dotenv("../cuber/.env.term")
 
 
 # def _quotation_to_float(quotation) -> float:

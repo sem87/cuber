@@ -11,7 +11,7 @@ from log.logicuber import system_log, trade_log , debug_log
 
 
 # Загружаем переменные окружения один раз при импорте
-load_dotenv("../terminator/.env.term")
+load_dotenv("../cuber/.env.term")
 
 
 class TelegramOtpravka:

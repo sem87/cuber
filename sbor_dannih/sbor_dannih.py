@@ -16,7 +16,7 @@ from ta.volume import VolumeWeightedAveragePrice
 from log.logicuber import system_log, trade_log
 
 # Загружаем переменные окружения
-load_dotenv("../terminator/.env.term")
+load_dotenv("../cuber/.env.term")
 
 
 @dataclass
