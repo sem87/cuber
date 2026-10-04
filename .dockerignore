@@ -11,7 +11,7 @@
 .env.*
 *.env
 .env.term
-logicuber.py
+
 # Ключи и сертификаты
 *.pem
 *.key
@@ -109,6 +109,6 @@ htmlcov/
 tmp/
 temp/
 logs/
-log/
-*.log
+#log/
+#*.log
 data/

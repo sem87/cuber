@@ -1,6 +1,6 @@
 services:
   cuber-bot:
-    image: sem87sem/cuber:latest
+    image: sem87sem/cuberbot:latest
     # build: .   # раскомментируйте, если собираете локально
     container_name: cuber-sem
     restart: unless-stopped
