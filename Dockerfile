@@ -42,3 +42,5 @@ CMD ["python", "cuberbot.py"]
 #   cuberbot
 # Создаем образ
 # docker build --build-arg HTTP_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" --build-arg HTTPS_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" -t cuberbot .
+
+# docker build --no-cache --build-arg HTTP_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" --build-arg HTTPS_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" -t sem87sem/cuberbot:latest .
