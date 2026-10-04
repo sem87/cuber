@@ -1,82 +1,36 @@
 services:
-  wallett-bot:
-    # 🔄 Автоматически тянем последний образ из репозитория
-    image: sem87sem/wallett:latest
-    # 🔄 Или собираем локально (раскомментировать, если нужно)
-    # build: .
-    container_name: wallett-sem
-    # 🔄 Автоперезапуск при падении
+  cuber-bot:
+    image: sem87sem/cuber:latest
+    # build: .   # раскомментируйте, если собираете локально
+    container_name: cuber-sem
     restart: unless-stopped
-    # Варианты: no | on-failure | always | unless-stopped
-    # 🔒 Монтируем секретные файлы из хоста в контейнер
-    volumes:
-      # Файлы с секретами (только чтение для безопасности)
-      - ./.env.wallet:/app/.env.wallet:ro
-      - ./credentials.json:/app/credentials.json:ro
-      - ./token.pickle:/app/token.pickle
-      # Логи (чтобы не терялись при перезапуске)
-      - ./logs:/app/logs
-      # Кэш и временные данные
-      - ./data:/app/data
-      # 🗄️ БАЗА ДАННЫХ — добавляем эту строку:
-      - ../terminator:/terminator  # ← Ключевая строка!
 
-    # 🔐 Переменные окружения (можно продублировать из .env.wallet)
+    # --- Переменные окружения из файла ---
+    env_file:
+      - .env.term
+
+    # 🔐 СЕКРЕТЫ И КОНФИГИ (скрытые файлы)
+    volumes:
+      # --- Сессия Pyrogram  ---
+      - ./SEM.session:/app/SEM.session  # файл *.session
+
+      # --- Конфиги ---
+      - ./tiker_figi.json:/app/tiker_figi.json
+
+      # --- База данных SQLite ---
+      - ./sql_terminator.db:/app/sql_terminator.db
+
+      # --- Логи (вся папка целиком) ---
+      - ./log/logs:/app/log/logs
+
+    # 🌐 Переменные окружения
     environment:
-      - PYTHONPATH=/app
-      # - TOKEN=${TOKEN}  # Если нужно передать из .env
-    # 🌐 Сетевые настройки
-    network_mode: bridge
-    # 📊 Ресурсы (опционально)
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: '1.0'
-#          memory: 512M
-#        reservations:
-#          cpus: '0.25'
-#          memory: 128M
-    # 🔍 Логирование
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    # 🏥 Health check (проверка живости)
+      - TZ=Europe/Moscow                         # Часовой пояс (важно для свечей!)
+
+    # 🏥 Health check
     healthcheck:
       test: ["CMD", "python", "-c", "print('OK')"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
-
-
-
-
-
-
-
-/
-
-
-#++++++++++++++++++++++==============================
-version: '3.8'
-
-services:
-  app:
-    build: .
-    container_name: cuber_app
-    restart: unless-stopped
-    # Опционально: проброс порта, если это веб-сервис (раскомментируй и укажи свой порт)
-    # ports:
-    #   - "8000:8000"
-    environment:
-      - PYTHONUNBUFFERED=1  # Чтобы логи выводились сразу, а не буферизировались
-      # Сюда можно добавить переменные из твоего .env файла
-    # Если нужно монтировать локальные файлы для разработки (опционально):
-    # volumes:
-    #   - .:/app
-
-    environment:
-      - HTTP_PROXY=http://user:password@186.141.140.94:438
-      - HTTPS_PROXY=http://user:password@186.141.140.94:438
+      start_period: 15s

@@ -30,3 +30,16 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD python -c "print('OK')" || exit 1
 
 CMD ["python", "cuberbot.py"]
+
+
+# Создаем образ
+# docker build \
+#   --build-arg HTTP_PROXY="http://login:password@ip:port" \
+#   --build-arg HTTPS_PROXY="http://login:password@ip:port" \
+#   -t cuberbot .
+# Запуск контейнера примерно
+# docker run -d \
+#   --name cuberbot_run \
+#   --env-file .env \
+#   --restart unless-stopped \
+#   cuberbot
