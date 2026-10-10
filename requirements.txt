@@ -1,9 +1,6 @@
-# =================НАЧАЛО ТИНЬКОФ==============
 # pip uninstall tinkoff-investments
 # pip install t-tech-investments --index-url https://opensource.tbank.ru/api/v4/projects/238/packages/pypi/simple
-# Кастомный реестр Т-Банка (пакета нет на PyPI)
 --extra-index-url https://opensource.tbank.ru/api/v4/projects/238/packages/pypi/simple
-# =================КОНЕЦ ТИНЬКОФ==============
 antlr4-python3-runtime==4.13.2
 astor==0.8.1
 cachetools==5.5.2

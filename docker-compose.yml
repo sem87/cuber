@@ -26,6 +26,9 @@ services:
     # 🌐 Переменные окружения
     environment:
       - TZ=Europe/Moscow                         # Часовой пояс (важно для свечей!)
+      - PYTHONIOENCODING=utf-8                   # Фикс кодировки для Python
+      - LANG=C.UTF-8                             # Фикс системной локали
+      - LC_ALL=C.UTF-8                           # Фикс всех остальных локалей
 
     # 🏥 Health check
     healthcheck:
