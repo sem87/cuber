@@ -307,7 +307,8 @@ class SborDannih:
             bb_txt = "BB⊂(расширение)тренд усилив начался импульс"
         else:
             bb_txt = "BB→(нейтрально)"
-        bb_block = f"{bb_txt};close{bb_pos};разн_BB={bb_w:.2f};средн_BB={data.mid_bollinger:.2f}"
+        bb_block = f"{bb_txt};close{bb_pos}"
+        #  ;разн_BB={bb_w:.2f};средн_BB={data.mid_bollinger:.2f}
         # bb_block = "!!!!!"
         # === Расчёт score    подумать включать сюда боллинджер и wap или нет===
         ydelnii_ves = {'sma': 0.3, 'rsi_d': 0.2, 'macd_d': 0.2, 'vol': 0.3}   # , 'macd_s': 0.20
