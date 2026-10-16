@@ -393,6 +393,7 @@ class SborDannih:
 
     def strategy_telega_day_hour(self, figi: str, tiker: str, data_day: IndicatorData, data_hour: IndicatorData):
         """Стратегия телеграм условие для Day, Hour"""
+        # =======================сделать ловлю дна на часе но другая стратегия ===============
         try:
             # 1. Оцениваем каждый таймфрейм отдельно
             buy_d, sell_d, score_d, desc_d = self._filtr_ozenki_strategy_telega_day_hour("day", data_day)
