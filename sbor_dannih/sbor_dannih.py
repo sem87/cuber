@@ -182,8 +182,8 @@ class SborDannih:
                 mid_bollinger=float(work_df["bb_middle"].iloc[-1]),
                 upper_bollinger=float(work_df["bb_upper"].iloc[-1]),
                 lower_bollinger=float(work_df["bb_lower"].iloc[-1]),
-                prev_bb_width = float(work_df["bb_width"].iloc[-2]),
-                prev_bb_width_2 = float(work_df["bb_width"].iloc[-3]),
+                prev_bb_width=float(work_df["bb_width"].iloc[-2]),
+                prev_bb_width_2=float(work_df["bb_width"].iloc[-3]),
                 volume=float(work_df["Объем"].iloc[-1]),
                 mean_volume=float(work_df["Объем"].iloc[-10:].mean()),
                 last_vwap=float(work_df["VWAP"].iloc[-1]),
@@ -293,7 +293,7 @@ class SborDannih:
         vol_block = f"Обьем:{vol_txt}({v / m:.2f})"
         rsi_block = f"RSI{'↑' if rsi_up else ('↓' if rsi_down else '→')}={data.last_rsi:.1f}"
         # Пока нужно узнать что это за last_vwap потом буду брать в расчет
-        #posl_vwap = f"{'close>VWAP-лонг' if data.close>data.last_vwap else ('close<VWAP—шорт' if data.close<data.last_vwap else 'Разобраться с VWAP')}={data.last_vwap:.1f}"
+        # posl_vwap = f"{'close>VWAP-лонг' if data.close>data.last_vwap else ('close<VWAP—шорт' if data.close<data.last_vwap else 'Разобраться с VWAP')}={data.last_vwap:.1f}"
         posl_vwap = "!!!"
         # --- BB Боллинджер ---  Боллинджер на пробу
         bb_pos = f"{' выш_ср_BB' if data.close > data.mid_bollinger else ' ниж_ср_BB'}"
@@ -311,10 +311,11 @@ class SborDannih:
         #  ;разн_BB={bb_w:.2f};средн_BB={data.mid_bollinger:.2f}
         # bb_block = "!!!!!"
         # === Расчёт score    подумать включать сюда боллинджер и wap или нет===
-        ydelnii_ves = {'sma': 0.3, 'rsi_d': 0.2, 'macd_d': 0.2, 'vol': 0.3}   # , 'macd_s': 0.20
+        ydelnii_ves = {'sma': 0.3, 'rsi_d': 0.2, 'macd_d': 0.2, 'vol': 0.3}  # , 'macd_s': 0.20
         score = 0.0
         score += ydelnii_ves['sma'] * (1 if sma_up else (-1 if sma_down else 0))  # +
-        score += ydelnii_ves['rsi_d'] * (1 if rsi_up else (-1 if rsi_down else 0)) # + на часе <65 отсекается автоматически
+        score += ydelnii_ves['rsi_d'] * (
+            1 if rsi_up else (-1 if rsi_down else 0))  # + на часе <65 отсекается автоматически
         # score += ydelnii_ves['macd_s'] * (1 if data.last_macd > 0 else -1)   # сдесь нужно исправить похоже >0 нужно только на 5 мин а сдесь сделать наоборот
         score += ydelnii_ves['macd_d'] * (1 if macd_up else (-1 if macd_down else 0))  # +
         # score += ydelnii_ves['vol'] * vol_score   # при продаже обьем должен вычитаться ведь??????
@@ -330,12 +331,37 @@ class SborDannih:
                 is_sell = True
                 desc = f"SMA10↓; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
         elif tf_name == "hour":
-            if sma_up and data.prev_rsi_3<data.last_rsi< 65:
+
+
+            # ==============Тест дно ============
+            # *****************
+            if data.close < data.mid_bollinger and (data.prev_macd_3 < data.prev_macd_4) and (
+                    data.prev_macd_3 < data.prev_macd < data.last_macd<0):
+                is_buy = True
+                desc = f"❗ДНО_ПРЕДВ❗_SMA10↑; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
+            # *****************
+            elif data.close < data.mid_bollinger and data.prev_macd_3 < data.prev_macd < data.last_macd<0:
+                is_buy = True
+                desc = f"🕳️ДНО🕳️_SMA10↑; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
+            # *****************
+            elif sma_up and data.prev_rsi_3< data.last_rsi<65:
                 is_buy = True
                 desc = f"SMA10↑; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
-            elif sma_down and  35<data.last_rsi<data.prev_rsi_3:    # rsi_down
+            # **************** КОНЕЦ ПОКУПКИ ***************
+            # Зеркальные условия для продажи
+            elif data.close > data.mid_bollinger and (data.prev_macd_3 > data.prev_macd_4) and (
+                    data.prev_macd_3 > data.prev_macd > data.last_macd > 0):
+                is_sell = True
+                desc = f"❗ВЕРХ_ПРЕДВ❗_SMA10↓; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
+            # *****************
+            elif data.close > data.mid_bollinger and data.prev_macd_3 > data.prev_macd > data.last_macd > 0:
+                is_sell = True
+                desc = f"🔝ВЕРХ🔝_SMA10↓; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
+            # *****************
+            elif sma_down and 35 < data.last_rsi < data.prev_rsi_3:  # rsi_down
                 is_sell = True
                 desc = f"SMA10↓; {rsi_block}; {macd_txt}; {vol_block}; {posl_vwap}; {bb_block}"
+            # **************** КОНЕЦ ПРОДАЖИ ***************
         return is_buy, is_sell, score, desc
 
     # ==================КОНЕЦ ФИЛЬТР СТРАТЕГИЙ (ОЦЕНКА ТАЙМФРЕЙМА)===============
@@ -434,10 +460,10 @@ class SborDannih:
                         "day": {"rsi": round(data_day.last_rsi, 2), "sma": round(data_day.last_sma_10_1, 2)},
                         "hour": {
                             "sma": round(data_hour.last_sma_10_1, 2)},
-                            "rsi": round(data_hour.last_rsi, 2),
-                            "macd": round(data_hour.last_macd, 2),
-                            "vol_mean": round(data_hour.mean_volume, 2),
-                            "vol": round(data_hour.volume, 2)
+                        "rsi": round(data_hour.last_rsi, 2),
+                        "macd": round(data_hour.last_macd, 2),
+                        "vol_mean": round(data_hour.mean_volume, 2),
+                        "vol": round(data_hour.volume, 2)
                     },
                 }
                 trade_log.info(f"{tiker}-ТЕЛЕГА продажа strategy_telega_day_hour")
@@ -462,7 +488,7 @@ class SborDannih:
         return "ЭТО КЛАСС СБОР ДАННЫХ"
 
 
-class PrivlicatelnostChitaemost:    # Почему кгда на продажу то фильтрует от большего к меньшему
+class PrivlicatelnostChitaemost:  # Почему кгда на продажу то фильтрует от большего к меньшему
     # def __init__(self, signals: dict, sort_by_score_hour: bool = True, reverse: bool = False):
     def __init__(self, signals: dict, sort_by_score_hour: bool = True, reverse: bool = True):
         """signals: словарь тикеров   sort_by_score_hour: если True — сортируем score по убыванию час а потом день"""
@@ -497,7 +523,3 @@ class PrivlicatelnostChitaemost:    # Почему кгда на продажу 
 
 if __name__ == "__main__":
     pass
-
-
-
-
