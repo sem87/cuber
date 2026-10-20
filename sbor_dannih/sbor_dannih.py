@@ -14,7 +14,7 @@ from ta.volatility import BollingerBands
 from ta.volume import VolumeWeightedAveragePrice
 
 from log.logicuber import system_log, trade_log
-from filtr_ozenki import evaluate_telega_day_hour
+# from filtr_ozenki import evaluate_telega_day_hour
 # Загружаем переменные окружения
 load_dotenv("../cuber/.env.term")
 
@@ -422,8 +422,10 @@ class SborDannih:
         # =======================сделать ловлю дна на часе но другая стратегия ===============
         try:
             # 1. Оцениваем каждый таймфрейм отдельно
-            buy_d, sell_d, score_d, desc_d = evaluate_telega_day_hour("day", data_day)
-            buy_h, sell_h, score_h, desc_h = evaluate_telega_day_hour("hour", data_hour)
+            # buy_d, sell_d, score_d, desc_d = evaluate_telega_day_hour("day", data_day)
+            # buy_h, sell_h, score_h, desc_h = evaluate_telega_day_hour("hour", data_hour)
+            buy_d, sell_d, score_d, desc_d = self._filtr_ozenki_strategy_telega_day_hour("day", data_day)
+            buy_h, sell_h, score_h, desc_h = self._filtr_ozenki_strategy_telega_day_hour("hour", data_hour)
             # 2. Проверяем строгий конфлюенс (все день и час должны быть True)
             # ==========Для телеграмма молния =============
             if buy_d and buy_h:
