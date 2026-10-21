@@ -1,14 +1,14 @@
 FROM python:3.11-slim
 
-# Объявляем аргументы (значения передаются только при сборке)
-ARG HTTP_PROXY
-ARG HTTPS_PROXY
-
-# Передаем их в переменные окружения для pip и системных утилит
-ENV HTTP_PROXY=$HTTP_PROXY
-ENV HTTPS_PROXY=$HTTPS_PROXY
-ENV http_proxy=$HTTP_PROXY
-ENV https_proxy=$HTTPS_PROXY
+# # Объявляем аргументы (значения передаются только при сборке)
+# ARG HTTP_PROXY
+# ARG HTTPS_PROXY
+#
+# # Передаем их в переменные окружения для pip и системных утилит
+# ENV HTTP_PROXY=$HTTP_PROXY
+# ENV HTTPS_PROXY=$HTTPS_PROXY
+# ENV http_proxy=$HTTP_PROXY
+# ENV https_proxy=$HTTPS_PROXY
 
 WORKDIR /app
 
@@ -42,5 +42,7 @@ CMD ["python", "cuberbot.py"]
 #   cuberbot
 # Создаем образ
 # docker build --build-arg HTTP_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" --build-arg HTTPS_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" -t cuberbot .
-
+# Повершелл
 # docker build --no-cache --build-arg HTTP_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" --build-arg HTTPS_PROXY="http://yUBkUP:xUoCe5@186.179.61.140:9768" -t sem87sem/cuberbot:latest .
+# ПУШИМ В ДОКЕР ХАБ
+# docker push sem87sem/cuberbot:latest
