@@ -112,3 +112,14 @@ logs/
 #log/
 #*.log
 data/
+venv/
+venv_test/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.git/
+.gitignore
+.env
+*.log

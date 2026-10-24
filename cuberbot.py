@@ -6,15 +6,15 @@ from log.logicuber import system_log, debug_log, trade_log
 from sbor_dannih.sbor_dannih import SborDannih, PrivlicatelnostChitaemost
 from telega.telegram import TelegramOtpravka
 from pokupka.pokupka import BuySellAktiv
-
+from actualnost_ticker.actualnost import ActualniiTiker
 
 if __name__ == "__main__":
     # ==========НАЧАЛО РОБОТЫ С JSON и подготовка работы с актуальными тикерами и их FIGI. ============
-    # with ActualniiTiker(days=5) as actual_tiker:
-    #     # Проверяем актуальность
-    #     actual_tiker.last_modified_json()
-    # =========================================
-    # Можно узнать тикер по фиги
+    with ActualniiTiker(days=5) as actual_tiker:
+        # Проверяем актуальность
+        actual_tiker.last_modified_json()
+    #=========================================
+    #Можно узнать тикер по фиги
     # print(actual_tiker.get_figi(tiker="TGLD@"))
     # Можно вытащить из базы sql_terminator все "на рынке"
     # actual_tiker.list_active_tickers()

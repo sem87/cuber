@@ -1,6 +1,7 @@
 services:
   cuber-bot:
     image: sem87sem/cuberbot:latest
+    pull_policy: always  # ← при каждом docker compose up принудительно тянуть свежий latest
     # build: .   # раскомментируйте, если собираете локально
     container_name: cuber-sem
     restart: unless-stopped
